@@ -1,0 +1,153 @@
+  {
+    "posts": [
+      {
+        "id": "1",
+        "user": {
+          "id": 101,
+          "username": "john_doe",
+          "profile_pic": "/assets/profile_john.jpeg"
+        },
+        "image": "/assets/sunset_waterfall.jpeg",
+        "caption": "Beautiful sunset 🌅 #Nature",
+        "likes": 120,
+        "comments": [
+          {
+            "user": "alice_wonder",
+            "comment": "Wow! Amazing shot! 📸"
+          },
+          {
+            "user": "mark_92",
+            "comment": "Where is this place?"
+          }
+        ],
+        "timestamp": "2025-02-11T14:30:00Z"
+      },
+      {
+        "id": "2",
+        "user": {
+          "id": 102,
+          "username": "emma_sky",
+          "profile_pic": "/assets/profile_emma.jpeg"
+        },
+        "image": "/assets/mountain_hike.jpeg",
+        "caption": "Climbed to the top! 🏞️ #AdventureTime",
+        "likes": 95,
+        "comments": [
+          {
+            "user": "trekker_tom",
+            "comment": "That's a stunning view!"
+          },
+          {
+            "user": "nature_lover",
+            "comment": "Bucket list stuff! ⛰️"
+          }
+        ],
+        "timestamp": "2025-02-12T10:15:00Z"
+      },
+      {
+        "id": "3",
+        "user": {
+          "id": 103,
+          "username": "tech_guy",
+          "profile_pic": "/assets/profile_techguy.jpeg"
+        },
+        "image": "/assets/coding_setup.jpeg",
+        "caption": "My new coding setup 🔥 #DevLife",
+        "likes": 210,
+        "comments": [
+          {
+            "user": "code_master",
+            "comment": "Clean and powerful! 💻"
+          },
+          {
+            "user": "design_queen",
+            "comment": "Love the minimal aesthetic!"
+          }
+        ],
+        "timestamp": "2025-02-13T18:00:00Z"
+      }
+    ],
+    "profile": {
+      "id": 101,
+      "username": [
+        "john_doe"
+      ],
+      "profile_pic": "/assets/profile_john.jpeg"
+    },
+    "suggestions": [
+      {
+        "id": "101",
+        "username": "john_doe",
+        "profile_pic": "/assets/profile_john.jpeg"
+      },
+      {
+        "id": "102",
+        "username": "emma_sky",
+        "profile_pic": "/assets/profile_emma.jpeg"
+      },
+      {
+        "id": "103",
+        "username": "tech_guy",
+        "profile_pic": "/assets/profile_techguy.jpeg"
+      },
+      {
+        "id": "104",
+        "username": "john_doe",
+        "profile_pic": "/assets/profile_john.jpeg"
+      },
+      {
+        "id": "105",
+        "username": "tech_guy",
+        "profile_pic": "/assets/profile_techguy.jpeg"
+      }
+    ],
+    "story": [
+      {
+        "id": "1",
+        "user": {
+          "id": 101,
+          "username": "john_doe",
+          "profile_pic": "/assets/profile_john.jpeg"
+        },
+        "image": "/assets/story_1.jpeg",
+        "timestamp": "2025-02-11T14:30:00Z"
+      },
+      {
+        "id": "2",
+        "user": {
+          "id": 102,
+          "username": "emma_sky",
+          "profile_pic": "/assets/profile_emma.jpeg"
+        },
+        "image": "/assets/story_2.jpeg",
+        "timestamp": "2025-02-12T10:15:00Z"
+      },
+      {
+        "id": "3",
+        "user": {
+          "id": 103,
+          "username": "tech_guy",
+          "profile_pic": "/assets/profile_techguy.jpeg"
+        },
+        "image": "/assets/story_3.jpeg",
+        "timestamp": "2025-02-13T18:00:00Z"
+      }
+    ],
+    "followers": [
+      {
+        "id": 101,
+        "username": "john_doe",
+        "profile_pic": "/assets/profile_john.jpeg"
+      },
+      {
+        "id": 102,
+        "username": "emma_sky",
+        "profile_pic": "/assets/profile_emma.jpeg"
+      },
+      {
+        "id": 103,
+        "username": "tech_guy",
+        "profile_pic": "/assets/profile_techguy.jpeg"
+      }
+    ]
+  }
