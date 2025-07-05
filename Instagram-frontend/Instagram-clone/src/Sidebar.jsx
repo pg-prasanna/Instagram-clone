@@ -15,7 +15,7 @@ function Sidebar() {
             <div style={{cursor:"Pointer"}}><i className="bi bi-play-btn"></i>Reels</div>
             <div style={{cursor:"Pointer"}}><i className="bi bi-chat-dots"></i>Messages</div>
             <div style={{cursor:"Pointer"}}><i className="bi bi-heart"></i>Notifications</div>
-            <div style={{cursor:"Pointer"}}><i className="bi bi-plus-square"></i>Create</div>
+            <div style={{cursor:"Pointer"}} onClick={()=>navigate("/create")}><i className="bi bi-plus-square"></i>Create</div>
             <div style={{cursor:"Pointer"}} onClick={()=>navigate("/profile")}><i className="bi bi-person-circle"></i>Profile</div>
         </div>
 

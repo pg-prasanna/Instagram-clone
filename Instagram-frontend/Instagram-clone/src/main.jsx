@@ -5,6 +5,7 @@ import App from './App.jsx'
 import ViewStory from './ViewStory.jsx';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import Profile from './Profile.jsx';
+import CreatePost from './CreatePost.jsx';
 
 const router=createBrowserRouter(
   [
@@ -19,6 +20,10 @@ const router=createBrowserRouter(
     {
       path:'/profile',
       element:<Profile/>
+    },
+    {
+      path:'/create',
+      element:<CreatePost />
     }
   ]
 )

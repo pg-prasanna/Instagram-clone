@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Stories from './Stories'
 import Posts from './Posts'
 
 function Feed() {
+  const [refresh, setRefresh] = useState(false);
+
+  const handlePostCreated = () => setRefresh(r => !r);
+
   return (
     <>
-        <Stories/>
-        {/* <CreatePost/> */}
-        <Posts/>
+      <Stories/>
+      <Posts refresh={refresh} />
     </>
   )
 }
