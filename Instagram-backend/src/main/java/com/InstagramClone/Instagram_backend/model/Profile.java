@@ -5,27 +5,27 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
-@Table(name = "followers")
+@Table(name = "profile")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Follower {
-
+public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //always follower is a profile
-    @ManyToOne
-    @JoinColumn(name = "follower_id")
-    private Profile follower;
-
     private String username;
 
     @Lob
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(length = 1000000)
     private String profilePhoto;
 
     private String profilePhotoType;
+
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
+    private List<Follower> followers;
 }
+

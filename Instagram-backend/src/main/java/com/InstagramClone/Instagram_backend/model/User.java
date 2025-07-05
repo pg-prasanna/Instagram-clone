@@ -26,7 +26,7 @@ public class User {
     private String profilePhotoType;
 
 
-    // Relationships
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Post> posts;

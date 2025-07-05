@@ -27,11 +27,6 @@ public class UserService {
         return userRepository.findByUsername(username).get();
     }
 
-    public String getUserProfilePhotoBase64(Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        return optionalUser.map(User::getProfilePhoto)
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
-    }
 
     public String create(String username, MultipartFile profilePic) throws Exception{
         User user=new User();
@@ -44,5 +39,11 @@ public class UserService {
         }
         userRepository.save(user);
         return "User created with id"+user.getId();
+    }
+
+    public List<User> getSuggestedUsers() {
+        List<User> allUsers = userRepository.findAll();
+        // Return first 5 users as suggestion demo (can add filter later)
+        return allUsers.stream().limit(5).toList();
     }
 }

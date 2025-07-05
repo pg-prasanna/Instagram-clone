@@ -23,7 +23,7 @@ public class Post {
     @Column(length=1000000)
     private String profileImage;
 
-    private String imageType; // e.g. "image/jpeg"
+    private String imageType; 
 
 
     private String caption;
