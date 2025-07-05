@@ -7,8 +7,12 @@ function Suggestions() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/profile/1') 
-      .then((res) => setProfile(res.data))
+      .get('http://localhost:8080/profile/1')
+      .then((res) => {
+        // Only keep the fields you need to avoid recursive followers
+        const { id, username, profilePhoto, profilePhotoType } = res.data;
+        setProfile({ id, username, profilePhoto, profilePhotoType });
+      })
       .catch((err) => console.error('Error fetching profile:', err));
   }, []);
 
@@ -42,13 +46,20 @@ function Suggestions() {
     <div className="suggestions w-75 m-4">
       {profile && (
         <div className="d-flex align-items-center mb-3">
-          <img
-            src={`data:image/${profile.profilePhotoType};base64,${profile.profilePhoto}`}
-            className="rounded-circle"
-            width={40}
-            height={40}
-            alt="profile"
-          />
+          {profile.profilePhoto && profile.profilePhotoType ? (
+            <img
+              src={`data:image/${profile.profilePhotoType};base64,${profile.profilePhoto}`}
+              className="rounded-circle"
+              width={40}
+              height={40}
+              alt="profile"
+            />
+          ) : (
+            <div
+              className="rounded-circle bg-secondary"
+              style={{ width: 40, height: 40 }}
+            />
+          )}
           <h5 className="ms-2">{profile.username}</h5>
           <small className="ms-auto text-primary" style={{ cursor: 'pointer' }}>
             Switch
@@ -121,42 +132,3 @@ export default Suggestions;
 //         .catch(error=>console.log(error))
 //     }
 
-
-
-//     return (
-//         <div>
-//             <div className="suggestions w-75 m-4">
-//                 {profile ? 
-//                     <div className='d-flex'>
-//                         <img className='dp rounded-circle' src={profile.profile_pic} alt="" />
-//                         <h5 className="username">{profile.username}</h5>
-//                         <small className="ms-auto text-primary">Switch</small>
-//                     </div> :
-//                 <p>Loading</p>}
-
-
-//                 <div className="d-flex">
-//                     <p>Suggested for you</p>
-//                     <b className="ms-auto">See All</b>
-//                 </div>
-
-//                 {suggestions.length>0 ? (
-//                         <div>
-//                             {
-//                             suggestions.map((suggestion)=>(
-//                                 <div key={suggestion.id}>
-//                                     <div className='d-flex'>
-//                                         <img className='dp rounded-circle' src={suggestion.profile_pic} alt="" />
-//                                         <h5 className='username'>{suggestion.username}</h5>
-//                                         <a style={{textDecoration:"none",cursor:"pointer"}} className="text-primary ms-auto" onClick={()=>{handleFollow(suggestion.id,suggestion.username,suggestion.profile_pic)}}>Follow</a>
-//                                     </div>
-//                                 </div>
-//                             ))
-//                             }
-//                         </div>) :( <div>Loading...</div> )}
-//             </div>
-//         </div>
-//     )
-// }
-
-// export default Suggestions;

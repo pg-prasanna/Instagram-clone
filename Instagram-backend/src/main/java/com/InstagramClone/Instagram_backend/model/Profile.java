@@ -1,5 +1,7 @@
 package com.InstagramClone.Instagram_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,11 +23,14 @@ public class Profile {
 
     @Lob
     @Column(length = 1000000)
+    @JsonProperty("profilePhoto")
     private String profilePhoto;
 
+    @JsonProperty("profilePhotoType")
     private String profilePhotoType;
 
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Follower> followers;
 }
 
