@@ -73,3 +73,7 @@
     width: 150px;
     height: 150px;
 }
+
+.sidebar-text-lg {
+    font-size: 1.25rem;
+}

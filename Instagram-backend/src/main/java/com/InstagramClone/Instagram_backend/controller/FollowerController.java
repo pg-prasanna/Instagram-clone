@@ -7,10 +7,7 @@ import com.InstagramClone.Instagram_backend.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.Optional;
@@ -46,6 +43,29 @@ public class FollowerController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Profile not found");
         }
+    }
+
+    @GetMapping("/{profileId}")
+    public ResponseEntity<?> getFollowersByProfileId(@PathVariable Long profileId) {
+        Optional<Profile> profile = profileRepository.findById(profileId);
+        if (profile.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Profile not found");
+        }
+        // Find all followers where follower.profile.id == profileId
+        return ResponseEntity.ok(
+            followerRepository.findAll().stream()
+                .filter(f -> f.getFollower() != null && f.getFollower().getId().equals(profileId))
+                .toList()
+        );
+    }
+
+    @DeleteMapping("/{followerId}")
+    public ResponseEntity<String> deleteFollower(@PathVariable Long followerId) {
+        if (!followerRepository.existsById(followerId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Follower not found");
+        }
+        followerRepository.deleteById(followerId);
+        return ResponseEntity.ok("Follower deleted");
     }
 }
 

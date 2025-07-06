@@ -2,78 +2,111 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
 function Profile() {
+    const [profile, setProfile] = useState(null)
+    const [followers, setFollowers] = useState([])
+    const [unfollowed, setUnfollowed] = useState(0)
+    const [username, setUsername] = useState('')
+    const [profilePhoto, setProfilePhoto] = useState(null)
+    const [previewPhoto, setPreviewPhoto] = useState('')
 
-    const [profile,setProfile]=useState(null)
+    useEffect(() => {
+        axios.get('http://localhost:8080/profile/1')
+            .then(res => {
+                setProfile(res.data)
+                setUsername(res.data.username)
+                setPreviewPhoto(
+                    res.data.profilePhoto && res.data.profilePhotoType
+                        ? `data:image/${res.data.profilePhotoType};base64,${res.data.profilePhoto}`
+                        : ''
+                )
+            })
+            .catch(error => console.log(error))
 
-    const [follwers, setFollowers]=useState([])
+        // Fetch followers for profile id 1
+        axios.get('http://localhost:8080/followers/1')
+            .then(res => setFollowers(res.data))
+            .catch(error => console.log(error))
+    }, [unfollowed])
 
-    const [unfollowed, setUnfollowed]=useState(0)
+    const handleUsernameChange = (e) => setUsername(e.target.value)
 
-    useEffect(()=>{
-        axios.get('http://localhost:3000/profile')
-        .then(data=>setProfile(data.data))
-        .catch(error=>console.log(error))
-
-        axios.get('http://localhost:3000/followers')
-        .then(data=>setFollowers(data.data))
-        .catch(error=>console.log(error))
-    },[unfollowed])
-
-
-    function handleOnChange(event){
-        setProfile(prevProfile=>({
-            ...prevProfile,
-            [event.target.name]:[event.target.value]
-        }))
+    const handleProfilePhotoChange = (e) => {
+        const file = e.target.files[0]
+        setProfilePhoto(file)
+        if (file) {
+            const reader = new FileReader()
+            reader.onloadend = () => setPreviewPhoto(reader.result)
+            reader.readAsDataURL(file)
+        }
     }
 
-    const handleUpdateProfile=async()=>{
-        axios.put('http://localhost:3000/profile', profile)
-        .catch(error=>console.log(error))
+    const handleUpdateProfile = async () => {
+        if (!profile) return;
+        const formData = new FormData();
+        formData.append('username', username);
+        if (profilePhoto) formData.append('profilePhoto', profilePhoto);
+        axios.put(`http://localhost:8080/profile/${profile.id}`, formData)
+            .then(() => alert('Profile updated!'))
+            .catch(error => console.log(error));
     }
 
-    const handleUnFollow=async(followerId)=>{
-        axios.delete(`http://localhost:3000/followers/${followerId}`)
-        .then(alert('Unfollowed Successfully'))
-        .then(setUnfollowed(!unfollowed))
-       .catch(error=>console.log(error))
+    const handleUnFollow = async (followerId) => {
+        axios.delete(`http://localhost:8080/followers/${followerId}`)
+            .then(() => {
+                alert('Unfollowed Successfully')
+                setUnfollowed(u => !u)
+            })
+            .catch(error => console.log(error))
     }
+
     return (
-    <div className='m-5'>
-        {profile ? (
-            <div>
-                <img className='profile rounded-circle' src={profile.profile_pic} alt="" />
-                <h5 className='mx-3'>{profile.username}</h5>
-
-                <input type="text" 
-                    value={profile.username}
-                    name='username'
-                    className='form-control my-4'
-                    onChange={handleOnChange}
-                />
-
-                <input type="text" 
-                    value={profile.profile_pic}
-                    name='profxile_pic'
-                    className='form-control'
-                    onChange={handleOnChange}
-                />
-
-                <button className='btn btn-primary my-4' onClick={handleUpdateProfile}>Update</button>
-            </div>
-        ):(<div>Loading Profile</div>)}
-
-
-        {follwers.length>0? (
-            follwers.map(follower=>(
-                <div key={follower.id} className='d-flex my-2'>
-                    <img className='dp rounded-circle' src={follower.profile_pic} alt="" />
-                    <h5 className='username'>{follower.username}</h5>
-                    <button className='btn btn-secondary ms-auto' onClick={()=>{handleUnFollow(follower.id)}}>Un Follow</button>
+        <div className='m-5'>
+            {profile ? (
+                <div>
+                    <img className='profile rounded-circle' src={previewPhoto} alt="profile" />
+                    <h5 className='mx-3'>{profile.username}</h5>
+                    <div className='my-3'>
+                        <b>{followers.length}</b> followers
+                    </div>
+                    <input
+                        type="text"
+                        value={username}
+                        name='username'
+                        className='form-control my-2'
+                        onChange={handleUsernameChange}
+                        placeholder="Username"
+                    />
+                    <input
+                        type="file"
+                        accept="image/*"
+                        className='form-control my-2'
+                        onChange={handleProfilePhotoChange}
+                    />
+                    <button className='btn btn-primary my-2' onClick={handleUpdateProfile}>Update</button>
                 </div>
-            ))
-        ):(<div>Loading Followers</div>)}
-    </div>
+            ) : (<div>Loading Profile</div>)}
+
+            <hr />
+            <h5>Following</h5>
+            {followers.length > 0 ? (
+                // Remove duplicates by username (or use id if unique)
+                [...new Map(followers.map(f => [f.username, f])).values()].map(follower => {
+                    const profilePhoto = follower.profilePhoto || follower.profile_photo;
+                    const profilePhotoType = follower.profilePhotoType || follower.profile_photo_type;
+                    return (
+                        <div key={follower.id} className='d-flex my-2 align-items-center'>
+                            <img className='dp rounded-circle' src={
+                                profilePhoto && profilePhotoType
+                                    ? `data:image/${profilePhotoType};base64,${profilePhoto}`
+                                    : ''
+                            } alt="follower" />
+                            <h6 className='username ms-2 mb-0'>{follower.username}</h6>
+                            <button className='btn btn-secondary ms-auto' onClick={() => handleUnFollow(follower.id)}>Unfollow</button>
+                        </div>
+                    )
+                })
+            ) : (<div>No following</div>)}
+        </div>
     )
 }
 

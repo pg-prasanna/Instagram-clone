@@ -4,6 +4,7 @@ import axios from 'axios';
 function Suggestions() {
   const [profile, setProfile] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
+  const [followers, setFollowers] = useState([]);
 
   useEffect(() => {
     axios
@@ -17,16 +18,31 @@ function Suggestions() {
   }, []);
 
   useEffect(() => {
+    // Fetch followers for profile id 1
+    axios
+      .get('http://localhost:8080/followers/1')
+      .then((res) => setFollowers(res.data))
+      .catch((err) => console.error('Error fetching followers:', err));
+  }, []);
+
+  useEffect(() => {
     if (profile) {
       axios
         .get('http://localhost:8080/user/suggestions')
         .then((res) => {
-          const filtered = res.data.filter((user) => user.id !== profile.id);
+          // Remove duplicates by user id and filter out followers
+          const followerUsernames = new Set(followers.map(f => f.username));
+          const filtered = res.data
+            .filter((user, idx, arr) =>
+              user.id !== profile.id &&
+              arr.findIndex(u => u.id === user.id) === idx &&
+              !followerUsernames.has(user.username)
+            );
           setSuggestions(filtered);
         })
         .catch((err) => console.error('Error fetching suggestions:', err));
     }
-  }, [profile]);
+  }, [profile, followers]);
 
   const handleFollow = (user) => {
     axios
@@ -38,6 +54,9 @@ function Suggestions() {
       })
       .then((res) => {
         alert(res.data);
+        // Remove followed user from suggestions and add to followers
+        setSuggestions(prev => prev.filter(u => u.id !== user.id));
+        setFollowers(prev => [...prev, user]);
       })
       .catch((err) => console.error('Error following user:', err));
   };

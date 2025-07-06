@@ -45,5 +45,32 @@ public class ProfileController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateProfile(
+            @PathVariable Long id,
+            @RequestParam("username") String username,
+            @RequestParam(value = "profilePhoto", required = false) MultipartFile profilePhoto) {
+
+        Optional<Profile> optionalProfile = profileRepository.findById(id);
+        if (optionalProfile.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Profile not found");
+        }
+
+        Profile profile = optionalProfile.get();
+        profile.setUsername(username);
+
+        try {
+            if (profilePhoto != null && !profilePhoto.isEmpty()) {
+                profile.setProfilePhoto(Base64.getEncoder().encodeToString(profilePhoto.getBytes()));
+                profile.setProfilePhotoType(profilePhoto.getContentType());
+            }
+            profileRepository.save(profile);
+            return ResponseEntity.ok("Profile updated");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating profile: " + e.getMessage());
+        }
+    }
+
 }
 
