@@ -5,6 +5,7 @@ function Sidebar() {
   const navigate = useNavigate();
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [profilePhotoType, setProfilePhotoType] = useState(null);
+  const [darkTheme, setDarkTheme] = useState(() => localStorage.getItem('theme') === 'dark');
 
   useEffect(() => {
     fetch('http://localhost:8080/profile/1')
@@ -19,8 +20,18 @@ function Sidebar() {
       });
   }, []);
 
+  useEffect(() => {
+    if (darkTheme) {
+      document.body.classList.add('dark-theme');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-theme');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [darkTheme]);
+
   return (
-    <div className='m-3 position-fixed'>
+    <div className={`m-3 position-fixed${darkTheme ? ' dark-sidebar' : ''}`}>
         <div className='d-flex flex-column gap-3 sidebar-text-lg'>
             <img className="logo-text" src="\assets\Instagram_text.png" alt="insta-text" />
             
@@ -43,6 +54,14 @@ function Sidebar() {
                 <i className="bi bi-person-circle"></i>
               )}
               Profile
+            </div>
+            <div className="mt-3">
+              <button
+                className="btn btn-outline-secondary btn-sm"
+                onClick={() => setDarkTheme(t => !t)}
+              >
+                {darkTheme ? 'Light Theme' : 'Dark Theme'}
+              </button>
             </div>
         </div>
 

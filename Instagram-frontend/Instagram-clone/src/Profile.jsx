@@ -22,7 +22,6 @@ function Profile() {
             })
             .catch(error => console.log(error))
 
-        // Fetch followers for profile id 1
         axios.get('http://localhost:8080/followers/1')
             .then(res => setFollowers(res.data))
             .catch(error => console.log(error))
@@ -66,7 +65,7 @@ function Profile() {
                     <img className='profile rounded-circle' src={previewPhoto} alt="profile" />
                     <h5 className='mx-3'>{profile.username}</h5>
                     <div className='my-3'>
-                        <b>{followers.length}</b> followers
+                        <b>{followers.length}</b> Following
                     </div>
                     <input
                         type="text"
@@ -89,7 +88,6 @@ function Profile() {
             <hr />
             <h5>Following</h5>
             {followers.length > 0 ? (
-                // Remove duplicates by username (or use id if unique)
                 [...new Map(followers.map(f => [f.username, f])).values()].map(follower => {
                     const profilePhoto = follower.profilePhoto || follower.profile_photo;
                     const profilePhotoType = follower.profilePhotoType || follower.profile_photo_type;
