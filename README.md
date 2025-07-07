@@ -1,6 +1,6 @@
 # Instagram Clone
 
-A full-stack Instagram clone built with React (frontend) and Spring Boot (backend) and MYSQL (Database).
+A full-stack Instagram clone built with React (frontend) and Spring Boot (backend) and MySQL (Database).
 
 ## Features
 
